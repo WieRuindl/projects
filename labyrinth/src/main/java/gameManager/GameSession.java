@@ -45,19 +45,16 @@ public class GameSession {
     @Value(value = "${world.name}")
     private String worldName;
     @Getter
-    @NonNull
     private World world;
 
     @Value(value = "${player.name}")
     private String playerName;
     @Getter
-    @NonNull
     private Player player;
 
     @Value(value = "${mode.name}")
     private String modeName;
     @Getter
-    @NonNull
     private ShowMode mode;
 
     @PostConstruct
@@ -65,5 +62,8 @@ public class GameSession {
         player = playersFactory.getPlayer(playerName);
         mode = modesFactory.getMode(modeName);
         world = worldsFactory.getWorld(worldName);
+        if (player == null || mode == null || world == null) {
+            throw new RuntimeException("Error while initializing: player = " + player + ", mode = " + mode + ", world = " + world);
+        }
     }
 }

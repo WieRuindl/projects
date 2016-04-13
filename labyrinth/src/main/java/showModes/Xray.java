@@ -3,7 +3,9 @@ package showModes;
 import interfaces.ShowMode;
 import characters.players.Player;
 import labyrinth.Cell;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Xray implements ShowMode {
     public Cell[][] getVisibleCells(Cell[][] cells, Player player) {
 

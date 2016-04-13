@@ -21,11 +21,11 @@ public abstract class World {
     }
 
     public void initImages() throws SlickException {
-        String world = getClass().getSimpleName();
-        fog = new Image("images/worlds/" + world + "/fog/fog.png");
-        wall = new Image("images/worlds/" + world + "/wall/wall.png");
-        floor = new Image("images/worlds/" + world + "/floor/floor.png");
-        chest = new Image("images/worlds/" + world + "/chest/chest.png");
+        String world = getClass().getSimpleName().toLowerCase();
+        fog = new Image("images/worlds/" + world + "/fog.png");
+        wall = new Image("images/worlds/" + world + "/wall.png");
+        floor = new Image("images/worlds/" + world + "/floor.png");
+        chest = new Image("images/worlds/" + world + "/chest.png");
     }
 
     public final Image getAnimation(Cell cell) {

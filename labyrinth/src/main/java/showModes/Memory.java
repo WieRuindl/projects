@@ -3,6 +3,7 @@ package showModes;
 import interfaces.ShowMode;
 import characters.players.Player;
 import labyrinth.Cell;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
@@ -10,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 
+@Component
 public class Memory implements ShowMode {
 
     private Map<Point, Cell[][]> memoredCells = new LinkedHashMap<>();

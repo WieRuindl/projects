@@ -7,7 +7,6 @@ import characters.players.Player;
 import labyrinth.Cell;
 
 @Component
-@Qualifier(value = "torchlight")
 public class Torchlight implements ShowMode {
     public Cell[][] getVisibleCells(Cell[][] cells, Player player) {
 

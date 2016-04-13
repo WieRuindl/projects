@@ -1,9 +1,9 @@
 package showModes;
 
 import interfaces.ShowMode;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import characters.players.Player;
 
 import java.util.Map;
 

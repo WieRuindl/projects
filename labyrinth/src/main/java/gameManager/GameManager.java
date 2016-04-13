@@ -71,7 +71,7 @@ public class GameManager {
         enemiesLocations.stream().forEach(location -> {
             Point p = new Point(location);
             try {
-                Enemy enemy = session.getWorld().createEnemy();
+                Enemy enemy = world.createEnemy();
                 enemy.setLocation(p);
                 enemy.setCells(cells);
                 enemies.add(enemy);
