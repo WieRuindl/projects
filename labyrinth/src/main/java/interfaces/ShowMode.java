@@ -1,6 +1,6 @@
 package interfaces;
 
-import players.Player;
+import characters.players.Player;
 import labyrinth.Cell;
 
 public interface ShowMode {

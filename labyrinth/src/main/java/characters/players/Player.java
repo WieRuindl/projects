@@ -1,18 +1,17 @@
-package players;
+package characters.players;
 
-import enemiesSkins.Enemy;
+import characters.enemies.Enemy;
 import interfaces.Description;
-import interfaces.Orientation;
 import labyrinth.Cell;
 import labyrinth.Direction;
 import lombok.Getter;
 import lombok.Setter;
-import gameManager.Character;
+import characters.Character;
 
 import java.util.Map;
 import java.util.List;
 
-public abstract class Player extends Character implements Description, Orientation {
+public abstract class Player extends Character implements Description {
 
     @Getter
     @Setter

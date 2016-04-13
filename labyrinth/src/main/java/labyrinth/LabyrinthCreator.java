@@ -1,6 +1,5 @@
 package labyrinth;
 
-import com.sun.glass.ui.Size;
 import lombok.Getter;
 
 import java.awt.*;

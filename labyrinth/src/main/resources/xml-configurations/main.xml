@@ -4,11 +4,10 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <import resource="enemies.xml"/>
     <import resource="players.xml"/>
 
     <context:annotation-config/>
-    <context:component-scan base-package="worlds, labyrinth, gameManager, animationManager, gui"/>
+    <context:component-scan base-package="characters, worlds, gameManager"/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">

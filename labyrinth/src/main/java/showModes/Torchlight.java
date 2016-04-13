@@ -3,7 +3,7 @@ package showModes;
 import interfaces.ShowMode;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import players.Player;
+import characters.players.Player;
 import labyrinth.Cell;
 
 @Component

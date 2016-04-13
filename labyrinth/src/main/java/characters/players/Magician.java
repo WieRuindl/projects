@@ -1,6 +1,6 @@
-package players;
+package characters.players;
 
-import enemiesSkins.Enemy;
+import characters.enemies.Enemy;
 import labyrinth.Cell;
 import labyrinth.Direction;
 import org.springframework.stereotype.Component;

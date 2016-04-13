@@ -1,4 +1,4 @@
-package players;
+package characters.players;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

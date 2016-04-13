@@ -2,14 +2,13 @@ package showModes;
 
 import interfaces.ShowMode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import players.Player;
+import characters.players.Player;
 
 import java.util.Map;
 
 @Component
-public class ModesFactory {
+public class ShowModesFactory {
     @Autowired
     private Map<String, ShowMode> modes;
 

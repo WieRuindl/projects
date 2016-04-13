@@ -1,20 +1,15 @@
 package gameManager;
 
-import enemiesSkins.Enemy;
+import characters.enemies.Enemy;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import players.Player;
+import characters.players.Player;
 import labyrinth.*;
 import interfaces.ShowMode;
-import players.PlayersFactory;
 import worlds.World;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -22,56 +17,56 @@ import java.util.List;
 @Component
 @PropertySource(value = "classpath:properties/game-session.properties")
 public class GameManager {
-
-    @Autowired
-    @Getter
-    private GameSession session;
-
     private Cell[][] cells;
     @Getter
     private List<Point> corners;
+
+    @Getter
+    World world;
+    @Getter
+    ShowMode mode;
+    @Getter
+    Player player;
     @Getter
     private List<Enemy> enemies = new ArrayList<>();
     @Getter
     private List<Treasure> treasures = new ArrayList<>();
 
-    @Value(value = "${labyrinth.enemiesNum}")
-    private int enemiesNum;
-
-    @Value(value = "${labyrinth.treasuresNum}")
-    private int treasuresNum;
-
     @Autowired
-    private GameManager(
-            @Value(value = "${labyrinth.width}") int width,
-            @Value(value = "${labyrinth.height}") int height) {
+    private GameManager(GameSession session) {
 
-        LabyrinthCreator labyrinth = new LabyrinthCreator(width, height);
+        LabyrinthCreator labyrinth = new LabyrinthCreator(session.getWidth(), session.getHeight());
 
         cells = labyrinth.getCells();
         corners = labyrinth.getCorners();
 
-        while (corners.size() < enemiesNum + treasuresNum && treasuresNum > 1) {
-            if (enemiesNum > treasuresNum) {
-                enemiesNum--;
-            } else {
-                treasuresNum--;
-            }
-        }
+        getMode(session);
+        getWorld(session);
+        setPlayer(session);
+        createEnemies(session);
+        createTreasures(session);
     }
 
-    @PostConstruct
-    private void setPlayer() {
-        Player player = session.getPlayer();
+    private void getMode(GameSession session) {
+        mode = session.getMode();
+    }
+
+    private void getWorld(GameSession session) {
+        world = session.getWorld();
+    }
+
+
+    private void setPlayer(GameSession session) {
+        player = session.getPlayer();
         player.setCells(cells);
         player.setLocation(new Point(1, 1));
     }
 
-    @PostConstruct
-    private void createEnemies() {
+    private void createEnemies(GameSession session) {
         Collections.shuffle(corners);
 
-        List<Point> enemiesLocations = corners.subList(0, enemiesNum);
+        int min = Math.min(corners.size(), session.getEnemiesNum());
+        List<Point> enemiesLocations = corners.subList(0, min);
 
         enemiesLocations.stream().forEach(location -> {
             Point p = new Point(location);
@@ -86,11 +81,11 @@ public class GameManager {
         });
     }
 
-    @PostConstruct
-    private void createTreasures() {
+    private void createTreasures(GameSession session) {
         Collections.shuffle(corners);
 
-        List<Point> treasuresLocations = corners.subList(0, treasuresNum);
+        int min = Math.min(corners.size(), session.getTreasuresNum());
+        List<Point> treasuresLocations = corners.subList(0, min);
 
         treasuresLocations.stream().forEach(location -> {
             Point p = new Point(location);
@@ -99,49 +94,52 @@ public class GameManager {
     }
 
     public Cell[][] getCells() {
-        return session.getMode().getVisibleCells(cells, session.getPlayer());
+        return mode.getVisibleCells(cells, player);
     }
 
     public void uniqueAction() {
-        session.getPlayer().uniqueAction(cells, enemies);
+        player.uniqueAction(cells, enemies);
         checkForEnemy();
     }
 
     public void movePlayer(Direction direction) {
-        session.getPlayer().move(direction);
+        player.move(direction);
         checkForTreasure();
         checkForEnemy();
     }
 
-    public void moveEnemy(Enemy enemy) {
-        enemy.move(session.getPlayer().getLocation());
-
-        if (enemy.getLocation().equals(session.getPlayer().getLocation())) {
-            session.getPlayer().setAlive(false);
+    public void moveEnemy(Enemy enemy, int delta) {
+        enemy.setDelay(enemy.getDelay() + delta);
+        if (enemy.getDelay() >= enemy.getMovementDelay()) {
+            enemy.move(player.getLocation());
+            enemy.setDelay(0);
+            if (enemy.getLocation().equals(player.getLocation())) {
+                player.setAlive(false);
+            }
         }
     }
 
     private void checkForEnemy() {
         enemies.stream().filter(enemy -> enemy.getLocation()
-                .equals(session.getPlayer().getLocation()))
-                .findFirst().ifPresent(enemy -> session.getPlayer().setAlive(false));
+                .equals(player.getLocation()))
+                .findFirst().ifPresent(enemy -> player.setAlive(false));
     }
 
     private void checkForTreasure() {
         Optional<Treasure> treasure = treasures.stream()
-                .filter(t -> t.getLocation().equals(session.getPlayer().getLocation()))
+                .filter(t -> t.getLocation().equals(player.getLocation()))
                 .findFirst();
 
         if (treasure.isPresent()) {
             treasures.remove(treasure.get());
-            session.getPlayer().setTreasures(session.getPlayer().getTreasures() + 1);
+            player.setTreasures(player.getTreasures() + 1);
             addNewTreasure();
         }
     }
 
     private void addNewTreasure() {
         LinkedList<Point> availableCorners = new LinkedList<>(corners);
-        availableCorners.remove(session.getPlayer().getLocation());
+        availableCorners.remove(player.getLocation());
         for (Treasure treasure : treasures) {
             availableCorners.remove(treasure.getLocation());
         }

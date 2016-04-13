@@ -1,7 +1,7 @@
 package showModes;
 
 import interfaces.ShowMode;
-import players.Player;
+import characters.players.Player;
 import labyrinth.Cell;
 
 import java.awt.*;

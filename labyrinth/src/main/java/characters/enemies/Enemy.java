@@ -1,8 +1,8 @@
-package enemiesSkins;
+package characters.enemies;
 
 import interfaces.Logic;
 import labyrinth.Direction;
-import gameManager.Character;
+import characters.Character;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,9 +10,9 @@ import lombok.Setter;
 import java.awt.*;
 
 @RequiredArgsConstructor
-public abstract class Enemy extends Character {
+public abstract class Enemy extends Character implements Logic {
 
-    private final Logic logic;
+    protected Direction keepDirection = Direction.values()[(int) (Math.random() * Direction.values().length)];
 
     @Getter
     @Setter
@@ -25,7 +25,7 @@ public abstract class Enemy extends Character {
     }
 
     public final void move(Point player) {
-        Direction direction = logic.makeDecision(cells, location, player);
+        Direction direction = makeDecision(cells, location, player);
         location.translate(direction.getDx(), direction.getDy());
     }
 }

@@ -1,25 +1,21 @@
-package enemies;
+package characters.enemies.pyramid;
 
-import gameManager.Character;
-import interfaces.Logic;
-import interfaces.Orientation;
+import characters.enemies.Enemy;
 import labyrinth.Cell;
 import labyrinth.Direction;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Component(value = "mummyLogic")
+@Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class Mummy implements Logic, Orientation {
-
-    private Direction keepDirection = Direction.values()[(int) (Math.random() * Direction.values().length)];
+@Qualifier("pyramid")
+public class Mummy extends Enemy {
     private Point playerLastSawLocation;
 
     public Direction makeDecision(Cell[][] cells, Point location, Point playerLocation) {
@@ -34,7 +30,7 @@ public class Mummy implements Logic, Orientation {
 
         Map<Direction, Cell> nearestCells = getNearestCells(cells, location);
 
-        List<Direction> availableDirections =
+        java.util.List<Direction> availableDirections =
                 nearestCells.keySet().stream()
                         .filter(direction -> nearestCells.get(direction) != Cell.WALL)
                         .collect(Collectors.toCollection(LinkedList::new));
@@ -97,4 +93,13 @@ public class Mummy implements Logic, Orientation {
         }
         return null;
     }
+
+    public double getMovementDelay() {
+        return 1000;
+    }
+
+    protected int getAnimationDuration() {
+        return 1000;
+    }
+
 }

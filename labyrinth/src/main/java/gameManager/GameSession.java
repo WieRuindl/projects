@@ -2,48 +2,68 @@ package gameManager;
 
 import interfaces.ShowMode;
 import lombok.Getter;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import players.Player;
-import players.PlayersFactory;
-import showModes.ModesFactory;
+import characters.players.Player;
+import characters.players.PlayersFactory;
+import showModes.ShowModesFactory;
 import worlds.World;
+import worlds.WorldsFactory;
 
 import javax.annotation.PostConstruct;
 
 @Component
 public class GameSession {
+    @Autowired
+    private ShowModesFactory modesFactory;
 
     @Autowired
-    PlayersFactory playersFactory;
+    private PlayersFactory playersFactory;
 
     @Autowired
-    ModesFactory modesFactory;
+    private WorldsFactory worldsFactory;
+
+
+    @Getter
+    @Value(value = "${labyrinth.enemiesNum}")
+    private int enemiesNum;
+
+    @Getter
+    @Value(value = "${labyrinth.treasuresNum}")
+    private int treasuresNum;
+
+    @Getter
+    @Value(value = "${labyrinth.width}")
+    private int width;
+
+    @Getter
+    @Value(value = "${labyrinth.height}")
+    private int height;
 
     @Value(value = "${world.name}")
-    String worldName;
-
-    @Autowired
+    private String worldName;
     @Getter
-    World world;
+    @NonNull
+    private World world;
 
     @Value(value = "${player.name}")
-    String playerName;
+    private String playerName;
     @Getter
-    Player player;
+    @NonNull
+    private Player player;
 
     @Value(value = "${mode.name}")
-    String modeName;
+    private String modeName;
     @Getter
-    ShowMode mode;
+    @NonNull
+    private ShowMode mode;
 
     @PostConstruct
     private void setSessionProperties() {
         player = playersFactory.getPlayer(playerName);
         mode = modesFactory.getMode(modeName);
-        if (player == null || mode == null) {
-            throw new RuntimeException();
-        }
+        world = worldsFactory.getWorld(worldName);
     }
 }
