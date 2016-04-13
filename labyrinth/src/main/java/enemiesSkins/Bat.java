@@ -18,8 +18,8 @@ public class Bat extends Enemy {
         super(logic);
     }
 
-    public double getSpeed() {
-        return 1.75;
+    public double getMovementDelay() {
+        return 750;
     }
 
     protected int getAnimationDuration() {

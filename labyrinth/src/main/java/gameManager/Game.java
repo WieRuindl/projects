@@ -137,14 +137,13 @@ public class Game extends BasicGameState {
             enemy.getAnimation().update(delta);
         }
 
-        fps++;
-        if (fps >= FPS * 10) {
-            fps = 0;
+        for (Enemy enemy : enemies) {
+            enemy.setDelay(enemy.getDelay() + delta);
+            if (enemy.getDelay() >= enemy.getMovementDelay()) {
+                enemy.move(player.getLocation());
+                enemy.setDelay(0);
+            }
         }
-
-        gameManager.getEnemies().stream()
-                .filter(enemy -> (int) (fps % (FPS / enemy.getSpeed())) == 0)
-                .forEach(gameManager::moveEnemy);
     }
 
     public int getID() {

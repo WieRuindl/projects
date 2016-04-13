@@ -18,8 +18,8 @@ public class Scorpion extends Enemy {
         super(logic);
     }
 
-    public double getSpeed() {
-        return 1;
+    public double getMovementDelay() {
+        return 1000;
     }
 
     protected int getAnimationDuration() {

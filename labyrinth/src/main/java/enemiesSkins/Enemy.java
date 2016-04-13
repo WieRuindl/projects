@@ -3,7 +3,9 @@ package enemiesSkins;
 import interfaces.Logic;
 import labyrinth.Direction;
 import gameManager.Character;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.awt.*;
 
@@ -12,7 +14,11 @@ public abstract class Enemy extends Character {
 
     private final Logic logic;
 
-    public abstract double getSpeed();
+    @Getter
+    @Setter
+    private int delay = 0;
+
+    public abstract double getMovementDelay();
 
     protected final String getSource() {
         return "images/enemy/" + getClass().getSimpleName().toLowerCase();
