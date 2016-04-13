@@ -22,8 +22,8 @@ public class Ghost extends Enemy {
         return 1;
     }
 
-    public double getAnimationDuration() {
-        return 1;
+    public int getAnimationDuration() {
+        return 1000;
     }
 
 }

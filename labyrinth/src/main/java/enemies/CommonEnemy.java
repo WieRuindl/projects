@@ -1,7 +1,9 @@
 package enemies;
 
+import enemiesSkins.Enemy;
 import gameManager.Character;
 import interfaces.Logic;
+import interfaces.Orientation;
 import labyrinth.Cell;
 import labyrinth.Direction;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Component(value = "commonLogic")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CommonEnemy extends Character implements Logic {
+public class CommonEnemy implements Logic, Orientation {
 
     private Direction keepDirection = Direction.values()[(int) (Math.random() * Direction.values().length)];
 

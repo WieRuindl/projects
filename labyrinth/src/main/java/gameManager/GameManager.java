@@ -134,7 +134,7 @@ public class GameManager {
 
         if (treasure.isPresent()) {
             treasures.remove(treasure.get());
-            session.getPlayer().findTreasure();
+            session.getPlayer().setTreasures(session.getPlayer().getTreasures() + 1);
             addNewTreasure();
         }
     }

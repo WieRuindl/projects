@@ -1,11 +1,8 @@
 package players;
 
 import enemiesSkins.Enemy;
-import interfaces.UniqueAction;
 import labyrinth.Cell;
 import labyrinth.Direction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -14,9 +11,10 @@ import java.util.List;
 @Component
 public class Rogue extends Player {
 
-    public double getAnimationDuration() {
-        return 1;
+    public int getAnimationDuration() {
+        return 1000;
     }
+
 
     public void uniqueAction(Cell[][] cells, List<Enemy> enemies) {
         int x = location.x;

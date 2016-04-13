@@ -22,7 +22,7 @@ public class Scorpion extends Enemy {
         return 1;
     }
 
-    public double getAnimationDuration() {
-        return 1;
+    protected int getAnimationDuration() {
+        return 1000;
     }
 }

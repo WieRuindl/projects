@@ -1,18 +1,17 @@
 package gameManager;
 
-import interfaces.Animation;
-import animationManager.AnimationContainer;
-import animationManager.AnimationsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import enemiesSkins.Enemy;
 import org.newdawn.slick.*;
 import labyrinth.*;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.springframework.beans.factory.annotation.Value;
+import players.Player;
+import worlds.World;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Game extends BasicGameState {
@@ -24,10 +23,27 @@ public class Game extends BasicGameState {
     @Autowired
     private GameManager gameManager;
 
-    @Autowired
-    private AnimationsManager animationManager;
-
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        World world = gameManager.getSession().getWorld();
+        Player player = gameManager.getSession().getPlayer();
+        List<Enemy> enemies = gameManager.getEnemies();
+        try {
+            world.initAnimation();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            player.initAnimation();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (Enemy enemy : enemies) {
+            try {
+                enemy.initAnimation();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void keyPressed(int key, char c) {
@@ -63,9 +79,9 @@ public class Game extends BasicGameState {
     }
 
     private void drawPlayer(Graphics g) {
-        AnimationContainer animationContainer = animationManager.getAnimationContainer(gameManager.getSession().getPlayer());
-        Image img = selectImage(animationContainer);
-        g.drawImage(img, gameManager.getSession().getPlayer().getLocation().x * 32, gameManager.getSession().getPlayer().getLocation().y * 32);
+        Player player = gameManager.getSession().getPlayer();
+        Animation animation = player.getAnimation();
+        g.drawAnimation(animation, animation.getWidth() * player.getLocation().x, animation.getHeight() * player.getLocation().y);
     }
 
     private void drawTreasures(Graphics g, Cell[][] cells) {
@@ -79,10 +95,8 @@ public class Game extends BasicGameState {
                 continue;
             }
 
-            Animation animation = gameManager.getSession().getWorld().getImage(Cell.TREASURE);
-            AnimationContainer animationContainer = animationManager.getAnimationContainer(animation);
-            Image img = selectImage(animationContainer);
-            g.drawImage(img, img.getWidth() * treasure.getLocation().x, img.getHeight() * treasure.getLocation().y);
+            Animation animation = gameManager.getSession().getWorld().getAnimation(Cell.TREASURE);
+            g.drawAnimation(animation, animation.getWidth() * treasure.getLocation().x, animation.getHeight() * treasure.getLocation().y);
         }
     }
 
@@ -94,9 +108,8 @@ public class Game extends BasicGameState {
             if (cell == Cell.FOG) {
                 continue;
             }
-            AnimationContainer animationContainer = animationManager.getAnimationContainer(enemy);
-            Image img = selectImage(animationContainer);
-            g.drawImage(img, img.getWidth() * x, img.getHeight() * y);
+            Animation animation = enemy.getAnimation();
+            g.drawAnimation(animation, animation.getWidth() * x, animation.getHeight() * y);
         }
     }
 
@@ -107,22 +120,23 @@ public class Game extends BasicGameState {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Cell cell = cells[y][x];
-                Animation animation = gameManager.getSession().getWorld().getImage(cell);
-                AnimationContainer animationContainer = animationManager.getAnimationContainer(animation);
-                Image img = selectImage(animationContainer);
-                g.drawImage(img, img.getWidth() * x, img.getHeight() * y);
+                Animation animation = gameManager.getSession().getWorld().getAnimation(cell);
+                g.drawAnimation(animation, animation.getWidth() * x, animation.getHeight() * y);
             }
         }
     }
 
-    private Image selectImage(AnimationContainer animationContainer) {
-        List<Image> images = animationContainer.getImages();
-        double animationDuration = animationContainer.getAnimationDuration();
-        int i = (int) (((fps / FPS) / animationDuration) % images.size());
-        return images.get(i);
-    }
-
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+
+        System.out.println(delta);
+
+        Player player = gameManager.getSession().getPlayer();
+        List<Enemy> enemies = gameManager.getEnemies();
+        player.getAnimation().update(delta);
+        for (Enemy enemy : enemies) {
+            enemy.getAnimation().update(delta);
+        }
+
         fps++;
         if (fps >= FPS * 10) {
             fps = 0;

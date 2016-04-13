@@ -22,7 +22,7 @@ public class Bat extends Enemy {
         return 1.75;
     }
 
-    public double getAnimationDuration() {
-        return 0.3;
+    protected int getAnimationDuration() {
+        return 300;
     }
 }
