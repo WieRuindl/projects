@@ -3,19 +3,15 @@ package worlds;
 import enemiesSkins.Enemy;
 import interfaces.WorldAccessory;
 import labyrinth.Cell;
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -28,10 +24,10 @@ public class World {
 
     private List<Class<? extends Enemy>> enemies;
 
-    private Animation fog;
-    private Animation wall;
-    private Animation floor;
-    private Animation chest;
+    private Image fog;
+    private Image wall;
+    private Image floor;
+    private Image chest;
 
     @PostConstruct
     private void InitEnemiesForCurrentWorld() {
@@ -57,30 +53,14 @@ public class World {
         }
     }
 
-    public void initAnimation() throws SlickException, IOException {
-        fog = initAnimation("images/worlds/" + world + "/fog", 1000);
-        wall = initAnimation("images/worlds/" + world + "/wall", 1000);
-        floor = initAnimation("images/worlds/" + world + "/floor", 1000);
-        chest = initAnimation("images/worlds/" + world + "/chest", 1000);
+    public void initImages() throws SlickException {
+        fog = new Image("images/worlds/" + world + "/fog/fog.png");
+        wall = new Image("images/worlds/" + world + "/wall/wall.png");
+        floor = new Image("images/worlds/" + world + "/floor/floor.png");
+        chest = new Image("images/worlds/" + world + "/chest/chest.png");
     }
 
-    private Animation initAnimation(String source, int duration) throws SlickException, IOException {
-        File root = new ClassPathResource(source).getFile();
-        File[] files = root.listFiles();
-        if (files == null || files.length == 0) {
-            throw new RuntimeException("Directory does not exist or empty: " + root);
-        }
-        Image[] images = new Image[files.length];
-        for (int i = 0; i < files.length; i++) {
-            if (!files[i].getName().endsWith(".png")) {
-                throw new RuntimeException("Found not *.png file: " + files[i].getPath());
-            }
-            images[i] = new Image(files[i].getPath());
-        }
-        return new Animation(images, duration);
-    }
-
-    public final Animation getAnimation(Cell cell) {
+    public final Image getAnimation(Cell cell) {
         switch (cell) {
             case EMPTY:
                 return floor;

@@ -7,7 +7,6 @@ import labyrinth.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.springframework.beans.factory.annotation.Value;
 import players.Player;
 import worlds.World;
 
@@ -16,10 +15,6 @@ import java.util.List;
 
 public class Game extends BasicGameState {
 
-    @Value(value = "${window.fps}")
-    private double FPS;
-    private double fps = 0;
-
     @Autowired
     private GameManager gameManager;
 
@@ -27,11 +22,7 @@ public class Game extends BasicGameState {
         World world = gameManager.getSession().getWorld();
         Player player = gameManager.getSession().getPlayer();
         List<Enemy> enemies = gameManager.getEnemies();
-        try {
-            world.initAnimation();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        world.initImages();
         try {
             player.initAnimation();
         } catch (IOException e) {
@@ -95,8 +86,8 @@ public class Game extends BasicGameState {
                 continue;
             }
 
-            Animation animation = gameManager.getSession().getWorld().getAnimation(Cell.TREASURE);
-            g.drawAnimation(animation, animation.getWidth() * treasure.getLocation().x, animation.getHeight() * treasure.getLocation().y);
+            Image image = gameManager.getSession().getWorld().getAnimation(Cell.TREASURE);
+            g.drawImage(image, image.getWidth() * treasure.getLocation().x, image.getHeight() * treasure.getLocation().y);
         }
     }
 
@@ -120,16 +111,13 @@ public class Game extends BasicGameState {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Cell cell = cells[y][x];
-                Animation animation = gameManager.getSession().getWorld().getAnimation(cell);
-                g.drawAnimation(animation, animation.getWidth() * x, animation.getHeight() * y);
+                Image image = gameManager.getSession().getWorld().getAnimation(cell);
+                g.drawImage(image, image.getWidth() * x, image.getHeight() * y);
             }
         }
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-
-        System.out.println(delta);
-
         Player player = gameManager.getSession().getPlayer();
         List<Enemy> enemies = gameManager.getEnemies();
         player.getAnimation().update(delta);
