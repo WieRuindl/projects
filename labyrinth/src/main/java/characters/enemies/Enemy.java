@@ -1,8 +1,8 @@
 package characters.enemies;
 
+import characters.Character;
 import interfaces.Logic;
 import labyrinth.Direction;
-import characters.Character;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
