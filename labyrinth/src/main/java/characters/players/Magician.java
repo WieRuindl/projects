@@ -11,10 +11,6 @@ import java.util.List;
 @Component
 public class Magician extends Player {
 
-    public int getAnimationDuration() {
-        return 1000;
-    }
-
     private Point createdWallLocation;
 
     public void uniqueAction(Cell[][] cells, List<Enemy> enemies) {

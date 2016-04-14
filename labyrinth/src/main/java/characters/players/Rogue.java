@@ -11,10 +11,6 @@ import java.util.List;
 @Component
 public class Rogue extends Player {
 
-    public int getAnimationDuration() {
-        return 1000;
-    }
-
     public void uniqueAction(Cell[][] cells, List<Enemy> enemies) {
         int x = location.x;
         int y = location.y;

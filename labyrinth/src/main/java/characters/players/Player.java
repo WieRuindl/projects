@@ -33,4 +33,8 @@ public abstract class Player extends Character implements Description {
     }
 
     public abstract void uniqueAction(Cell[][] cells, List<Enemy> enemies);
+
+    public int getAnimationDuration() {
+        return 1000;
+    }
 }
